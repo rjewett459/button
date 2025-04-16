@@ -24,12 +24,18 @@ app.get("/token", async (req, res) => {
         headers: {
           Authorization: `Bearer ${apiKey}`,
           "Content-Type": "application/json",
+          "OpenAI-Beta": "realtime=v1"
         },
         body: JSON.stringify({
           model: "gpt-4o-realtime-preview-2024-12-17",
-          voice: "verse",
+          voice: "sage", // ✅ using shimmer
+          instructions: `
+You are a warm, clear, and confident voice assistant. 
+  Speak like you're helping a close friend or sister—sincere, supportive, and helpful. 
+  Avoid robotic or whispery tones. Respond with professional ease and friendly empathy.
+`,
         }),
-      },
+      }
     );
 
     const data = await response.json();
@@ -47,7 +53,7 @@ app.use("*", async (req, res, next) => {
   try {
     const template = await vite.transformIndexHtml(
       url,
-      fs.readFileSync("./client/index.html", "utf-8"),
+      fs.readFileSync("./client/index.html", "utf-8")
     );
     const { render } = await vite.ssrLoadModule("./client/entry-server.jsx");
     const appHtml = await render(url);
@@ -60,5 +66,5 @@ app.use("*", async (req, res, next) => {
 });
 
 app.listen(port, () => {
-  console.log(`Express server running on *:${port}`);
+  console.log(`✅ Express server running on http://localhost:${port}`);
 });
